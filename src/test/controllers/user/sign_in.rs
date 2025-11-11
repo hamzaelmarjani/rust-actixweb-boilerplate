@@ -1,6 +1,7 @@
 use crate::structs::jwt::TokensPayload;
 
-pub async fn perform_sign_in() -> Option<TokensPayload> {
+#[allow(dead_code)]
+async fn perform_sign_in() -> Option<TokensPayload> {
     std::env::set_var("JWT_SECRET", "u5LdfHsuS1xYxZ8FSg9X5fY3o5w8Rv5MG7ZkUPHTkB4=");
     std::env::set_var(
         "ENCRYPTION_SECRET",

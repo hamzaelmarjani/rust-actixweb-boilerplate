@@ -1,7 +1,7 @@
 use crate::utils::logging::print_welcome_message;
 use actix_cors::Cors;
 use actix_web::middleware::Logger;
-use actix_web::{middleware::from_fn, App, HttpServer};
+use actix_web::{get, middleware::from_fn, App, HttpResponse, HttpServer, Responder};
 use dotenvy::dotenv;
 
 mod constants;
@@ -13,6 +13,12 @@ mod structs;
 mod test;
 mod utils;
 mod views;
+
+#[get("/health")]
+/// An entry point to check the app's health.
+async fn health() -> impl Responder {
+    HttpResponse::Ok().body("Server App is running successfully!")
+}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -61,6 +67,9 @@ async fn main() -> std::io::Result<()> {
                     // Maximum timeout response in seconds (240 secs = 4 mins)
                     .max_age(240),
             )
+            // =======================================================
+            // • Check the app's health.
+            .service(health)
             // =======================================================
             // • App Services and Entry Points
             // =======================================================

@@ -67,6 +67,34 @@ cd rust-actixweb-boilerplate && cargo run
 
 ---
 
+## Docker
+You can easily dockernize the server app by using the Dockerfile provided in the project.
+
+*NOTE:* You need to provide the environment variables in the `.env` file, or you can set them as environment variables on your machine.
+
+```
+export JWT_SECRET="u5LdfHsuS1xYxZ8FSg9X5fY3o5w8Rv5MG7ZkUPHTkB4="
+export ENCRYPTION_SECRET="Q/ifjccW09g6ZgkQ8HUN1YUVSgGbeDRO6R4bXqjM1V8=" 
+```
+
+Build the docker image:
+
+```
+docker build -t server-app-rust-actix .
+```
+
+Run the docker image and include the environment variables:
+
+```
+docker run -p 8080:8080 \
+  -e JWT_SECRET=$JWT_SECRET \
+  -e ENCRYPTION_SECRET=$ENCRYPTION_SECRET \
+  server-app-rust-actix
+```
+If everything is working fine, you should see the server running on port 8080.
+
+---
+
 ## Project Structure:
 
 The project is built using the MVC architecture, it was designed to be scalable VERTICALLY, following the "Monolithic" rules, but is ready to be separated to "Micro Services." The project structure is as follows:

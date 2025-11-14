@@ -1,6 +1,12 @@
 [package]
 name = "rust-actixweb-boilerplate"
-version = "0.0.1"
+authors = ["github.com/hamzaelmarjani"]
+homepage = "github.com/hamzaelmarjani/rust-actixweb-boilerplate"
+repository = "github.com/hamzaelmarjani/rust-actixweb-boilerplate"
+keywords = ["rust", "actixweb", "server-app", "authentication", "monolith"]
+license = "MIT"
+readme = "README.md"
+version = "0.0.2"
 edition = "2021"
 
 [dependencies]
@@ -9,7 +15,6 @@ actix-cors = "0.7.1"
 jsonwebtoken = { version = "10.2.0", features = ["rust_crypto"] }
 serde = "1.0.228"
 serde_json = { version = "1.0.145" }
-tokio = { version = "1.48.0", features = ["full"] }
 lazy_static = "1.5.0"
 regex = "1.12.2"
 aes-gcm = { version = "0.10.3", features = ["std"] }

@@ -37,8 +37,6 @@ pub async fn auth_guard(
     // to the next function, otherwise we need to check the request source first.
     if is_public {
         return call_next_function(next, req).await;
-        // let res = next.call(req).await?;
-        // return Ok(res.map_into_left_body());
     }
 
     // 4. Get the token from the request `Authorization` header.

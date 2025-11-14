@@ -29,11 +29,13 @@ async fn perform_sign_in() -> Option<TokensPayload> {
         let body: serde_json::Value = test::read_body_json(resp).await;
 
         let tokens = TokensPayload {
-            access_token: Some(body["data3"]["access_token"].clone())
-                .unwrap_or(json!(""))
+            access_token: Some(body["data3"]["access_token"].clone().as_str())
+                .unwrap_or(Some(""))
+                .unwrap()
                 .to_string(),
-            refresh_token: Some(body["data3"]["refresh_token"].clone())
-                .unwrap_or(json!(""))
+            refresh_token: Some(body["data3"]["refresh_token"].clone().as_str())
+                .unwrap_or(Some(""))
+                .unwrap()
                 .to_string(),
         };
 

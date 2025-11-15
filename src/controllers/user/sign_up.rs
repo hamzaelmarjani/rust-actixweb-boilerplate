@@ -73,7 +73,6 @@ async fn user_sign_up(body: Json<UserSignUPDTO>) -> impl Responder {
         }
 
         // 9. Tokanize the user and return the tokens, open `user_token_responder` for more.
-        // #![feature(box_into_inner)]
         user_token_responder(&new_user, &mut response, None)
     } else {
         response.data1 = Some(serde_json::json!("invalid-email-address"));

@@ -16,7 +16,7 @@ pub fn user_token_responder(
         .encode_jwt(&user.to_string(), None)
         .unwrap_or(String::from(""));
 
-    // 2. We need to create a refresh_token with a long expiration time (30 Days)
+    // 2. If the refresh_token doesn't exist, we need to create it again with a long expiration time (30 Days)
     let refresh_token = if refreshed_token.is_none() {
         JwtManager::new()
             .unwrap()

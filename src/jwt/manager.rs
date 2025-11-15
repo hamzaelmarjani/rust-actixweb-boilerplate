@@ -116,7 +116,7 @@ impl JwtManager {
     pub fn decode_jwt(&self, token: &str) -> Result<TokenData<Claims>> {
         let decoding_key = DecodingKey::from_secret(self.secret_key.as_ref());
         let mut validation = Validation::new(Algorithm::HS256);
-        validation.validate_exp = false; // Don't validate expiration
+        validation.validate_exp = false;
 
         decode::<Claims>(token, &decoding_key, &validation)
             .map_err(|e| anyhow!("JWT decoding failed: {}", e))

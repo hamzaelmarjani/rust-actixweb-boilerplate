@@ -11,6 +11,7 @@
 * This module is the security layer that filters the server-app from any Unauthorized Requests
 */
 
+use crate::structs::user::User;
 use crate::{
     constants::{responder::global_auth_guard_right_body, routes::PUBLIC_ROUTES},
     structs::{
@@ -46,34 +47,54 @@ pub async fn auth_guard(
 
         // 5. Decode the token and extract the `TokensPayload`
         let decoded_tokens = jwt_manager.decode_jwt_and_decrypt(token);
+        println!("decoded_tokens -> {:?}", decoded_tokens);
 
         match decoded_tokens {
-            Ok(tokens) => {
-                let tokens_payload: TokensPayload = serde_json::from_str(&tokens)?;
+            Ok(token) => {
+                let user_payload = serde_json::from_str::<User>(&token);
+                match user_payload {
+                    Ok(user) => {
+                        // 6. Handle the `tokens_payload.access_token` and `tokens_payload.refresh_token` depend on your situation
+                        // best practice is to check the user from your authentication provider such as `Firebase Authentication`, `AWS Cognito`, `Azure AD B2C`, etc.
+                        // NOTE: Also it's safe to store the user ID or user EMAIL in the token payload as we always encrypt the payload before send it to the user client, so you can extract them here wihtout the double check of the authenticated user.
 
-                // 6. Handle the `tokens_payload.access_token` and `tokens_payload.refresh_token` depend on your situation
-                // best practice is to check the user from your authentication provider such as `Firebase Authentication`, `AWS Cognito`, `Azure AD B2C`, etc.
-                // NOTE: Also it's safe to store the user ID or user EMAIL in the token payload as we always encrypt the payload before send it to the user client, so you can extract them here wihtout the double check of the authenticated user.
+                        // 7. If the user is found and authenticated with the `tokens_payload.accessToken`, you can continue to the next function.
+                        // Also, inject the `MiddlewareExtensionsData` to the request extensions to use it later in the next function.
 
-                // 7. If the user is found and authenticated with the `tokens_payload.accessToken`, you can continue to the next function.
-                // Also, inject the `MiddlewareExtensionsData` to the request extensions to use it later in the next function.
+                        // For now, I'll add this standard unique user id `790505571683` as a placeholder.
+                        let extracted_user_id = String::from("790505571683");
 
-                // For now, I'll add this standard unique user id `790505571683` as a placeholder.
-                let extracted_user_id = String::from("790505571683");
+                        req.extensions_mut().insert(MiddlewareExtensionsData {
+                            user_id: user.id,
+                            // The refresh token always None in this case. We expect only the access token,
+                            // which comes with the request via Authorization header, but you can add it either and extract it
+                            // to rotate the token and ignore multiple tokens generation, but for now it is optional only.
+                            // I'll implement it in the future updates.
+                            refresh_token: None,
+                        });
 
-                req.extensions_mut().insert(MiddlewareExtensionsData {
-                    user_id: extracted_user_id,
-                    access_token: tokens_payload.access_token,
-                    refresh_token: tokens_payload.refresh_token,
-                });
-
-                call_next_function(next, req).await
+                        call_next_function(next, req).await
+                    }
+                    // Note: In this case, this error comes from the app itself, not from the user,
+                    // so we will return a `500 Internal Server Error` response.
+                    Err(e) => {
+                        eprintln!("Error Parse Payloads -> {:?}", e);
+                        global_auth_guard_right_body(
+                            req,
+                            500,
+                            &GlobalResponse::<serde_json::Value> {
+                                message: Some(String::from("internal-error")),
+                                data: None,
+                            },
+                        )
+                    }
+                }
             }
-            Err(_) => global_auth_guard_right_body(
+            Err(e) => global_auth_guard_right_body(
                 req,
                 401,
                 &GlobalResponse::<serde_json::Value> {
-                    message: Some(String::from("no-user-found")),
+                    message: Some(String::from("unauthorized-request")),
                     data: None,
                 },
             ),

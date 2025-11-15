@@ -27,6 +27,6 @@ async fn user_lifecycle(middleware_data: ReqData<MiddlewareExtensionsData>) -> i
     user_token_responder(
         &combine_user_by_id(middleware_data.user_id.clone()),
         &mut response,
-        Some(middleware_data.refresh_token.clone()),
+        middleware_data.refresh_token.clone(),
     )
 }

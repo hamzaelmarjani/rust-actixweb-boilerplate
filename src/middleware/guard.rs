@@ -47,7 +47,6 @@ pub async fn auth_guard(
 
         // 5. Decode the token and extract the `TokensPayload`
         let decoded_tokens = jwt_manager.decode_jwt_and_decrypt(token);
-        println!("decoded_tokens -> {:?}", decoded_tokens);
 
         match decoded_tokens {
             Ok(token) => {
@@ -60,9 +59,6 @@ pub async fn auth_guard(
 
                         // 7. If the user is found and authenticated with the `tokens_payload.accessToken`, you can continue to the next function.
                         // Also, inject the `MiddlewareExtensionsData` to the request extensions to use it later in the next function.
-
-                        // For now, I'll add this standard unique user id `790505571683` as a placeholder.
-                        let extracted_user_id = String::from("790505571683");
 
                         req.extensions_mut().insert(MiddlewareExtensionsData {
                             user_id: user.id,
@@ -90,7 +86,7 @@ pub async fn auth_guard(
                     }
                 }
             }
-            Err(e) => global_auth_guard_right_body(
+            Err(_) => global_auth_guard_right_body(
                 req,
                 401,
                 &GlobalResponse::<serde_json::Value> {

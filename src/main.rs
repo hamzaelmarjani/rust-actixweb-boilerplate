@@ -95,7 +95,7 @@ async fn main() -> std::io::Result<()> {
     })
     // 4. Server runs on all those urls:
     // `http://localhost:8080` or `http://127.0.0.1:8080` or `http://0.0.0.0:8080`
-    .bind(("127.0.0.1", 8080))?
+    .bind(("0.0.0.0:8080"))?
     .run()
     .await
 }

@@ -6,8 +6,8 @@ repository = "github.com/hamzaelmarjani/rust-actixweb-boilerplate"
 keywords = ["rust", "actixweb", "server-app", "authentication", "monolith"]
 license = "MIT"
 readme = "README.md"
-version = "0.0.3"
-edition = "2021"
+version = "0.0.4"
+edition = "2024"
 
 [dependencies]
 actix-web = "4"

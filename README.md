@@ -5,6 +5,7 @@
 [![Rust](https://img.shields.io/badge/Rust-orange?style=for-the-badge&logo=rust&logoColor=white)](https://rust-lang.org/)
 [![ActixWeb](https://img.shields.io/badge/ActixWeb-black?style=for-the-badge&logo=actix&logoColor=white)](https://actix.rs/)
 [![JWT](https://img.shields.io/badge/Json%20Web%20Token-purple?style=for-the-badge&logo=JSON%20web%20tokens)](https://www.jwt.io/)
+[![Docker](https://img.shields.io/badge/Docker-white?style=for-the-badge&logo=Docker)](https://www.docker.com)
 
 
 </div>

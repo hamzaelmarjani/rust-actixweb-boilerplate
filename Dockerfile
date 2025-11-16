@@ -13,7 +13,7 @@
 # ------------------------------------------------------------------------
 
 # Multi-stage build for optimized Rust container
-FROM rust:1.83-slim AS builder
+FROM rust:latest AS builder
 
 # Install required system dependencies
 RUN apt-get update && apt-get install -y \
@@ -31,14 +31,15 @@ COPY Cargo.toml Cargo.lock .cargo/* ./
 RUN mkdir src && echo "fn main() {}" > src/main.rs
 
 # Build dependencies (this layer will be cached unless Cargo.toml changes)
-RUN cargo build --release --bin sympho-api-rust && rm src/main.rs
+RUN cargo build --release --bin rust-actixweb-boilerplate && rm src/main.rs
 
 # Copy source code
 COPY src ./src
+COPY templates ./templates
 
 # Build the actual application
 # Touch main.rs to ensure it's rebuilt
-RUN touch src/main.rs && cargo build --release --bin sympho-api-rust
+RUN touch src/main.rs && cargo build --release --bin rust-actixweb-boilerplate
 
 # Runtime stage - use distroless for minimal size
 FROM gcr.io/distroless/cc-debian12
@@ -47,7 +48,7 @@ FROM gcr.io/distroless/cc-debian12
 USER nonroot:nonroot
 
 # Copy the binary from builder stage
-COPY --from=builder /app/target/release/sympho-api-rust /app/server
+COPY --from=builder /app/target/release/rust-actixweb-boilerplate /app/server
 
 # Expose port
 EXPOSE 8080
